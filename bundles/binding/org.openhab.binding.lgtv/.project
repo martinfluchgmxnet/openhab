@@ -1,10 +1,7 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>${artifactId}</name>
-	<comment>This is the ${binding-name} binding of the open Home Automation Bus (openHAB)</comment>
+	<name>org.openhab.binding.lgtv</name>
+	<comment>This is the LGTV binding of the open Home Automation Bus (openHAB)</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -28,9 +25,15 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.api.tools.apiAnalysisBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
+		<nature>org.eclipse.pde.api.tools.apiAnalysisNature</nature>
 	</natures>
 </projectDescription>
