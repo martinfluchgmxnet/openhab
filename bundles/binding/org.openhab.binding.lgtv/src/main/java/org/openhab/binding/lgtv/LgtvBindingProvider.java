@@ -17,8 +17,9 @@ import org.openhab.core.items.Item;
  * This interface is implemented by classes that can provide mapping information
  * between openHAB items and LGTV devices.
  * 
+ * @author Martin Fluch
  * @author Pauli Anttila
- * @since 1.3.0
+ * @since 1.5.0
  */
 public interface LgtvBindingProvider extends BindingProvider {
 

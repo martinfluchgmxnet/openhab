@@ -1,3 +1,16 @@
+/**
+ * Copyright (c) 2010-2013, openHAB.org and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * LGInteraction / Implementation of LG API
+ * Author Martin Fluch martinfluch@gmx.net 
+ */
+
+
 package org.openhab.binding.lgtv.lginteraction;
 
 import java.io.StringReader;
@@ -12,6 +25,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
+/**
+ * This class handles xml encoded channel changed messages 
+ * receiver.
+ * 
+ * @author Martin Fluch
+ * @since 1.5.0
+ */
 public class LgTvEventChannelChanged {
 
 	@XmlRootElement(name = "envelope")

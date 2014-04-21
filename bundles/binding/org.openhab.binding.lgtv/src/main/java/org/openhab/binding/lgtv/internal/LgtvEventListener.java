@@ -16,7 +16,7 @@ import java.util.EventObject;
  * receiver.
  * 
  * @author Martin Fluch
- * @since 1.4.0
+ * @since 1.5.0
  */
 public interface LgtvEventListener extends EventListener {
 

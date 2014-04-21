@@ -1,3 +1,16 @@
+/**
+ * Copyright (c) 2010-2013, openHAB.org and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * LGInteraction / Implementation of LG API
+ * Author Martin Fluch martinfluch@gmx.net 
+ */
+
+
 package org.openhab.binding.lgtv.lginteraction;
 
 import java.io.BufferedReader;
@@ -20,6 +33,12 @@ import org.openhab.binding.lgtv.lginteraction.LgTvChannelSet.onechannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class handles the interaction between one tv and the plugin 
+ * 
+ * @author Martin Fluch
+ * @since 1.5.0
+ */
 public class LgTvInteractor implements LgtvEventListener {
 
 	// status of connection to tv
@@ -146,7 +165,6 @@ public class LgTvInteractor implements LgtvEventListener {
 		if (ispaired()) {
 			answer = sendtotv("GET", "udap/api/data?target=cur_channel",
 					message);
-			// logger.debug("answer: "+answer);
 		}
 		return new String(answer);
 	}
@@ -159,14 +177,11 @@ public class LgTvInteractor implements LgtvEventListener {
 		if (ispaired()) {
 			answer = sendtotv("GET", "udap/api/data?target=channel_list",
 					message);
-			// logger.debug("answer: "+answer);
 
 			try {
 				channelset.loadchannels(answer);
 				int i = channelset.getsize();
-				// logger.debug("size="+i);
 				String s = String.valueOf(i);
-				// logger.debug("size as string="+s);
 				answer = s;
 				if (this.xmldatafiles.length() > 0) {
 
@@ -180,8 +195,7 @@ public class LgTvInteractor implements LgtvEventListener {
 
 			} catch (JAXBException e) {
 
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("exception in getallchannels: ",e);
 				org.xml.sax.SAXParseException f = (org.xml.sax.SAXParseException) e
 						.getLinkedException();
 				logger.error("parse exception e=" + e.toString() + " line="
@@ -207,9 +221,7 @@ public class LgTvInteractor implements LgtvEventListener {
 			try {
 				appset.loadapps(answer);
 				int i = appset.getsize();
-				// logger.debug("size="+i);
 				String s = String.valueOf(i);
-				// logger.debug("sizeasstring="+s);
 				answer = s;
 
 				if (this.xmldatafiles.length() > 0) {
@@ -224,8 +236,7 @@ public class LgTvInteractor implements LgtvEventListener {
 
 			} catch (JAXBException e) {
 
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("error in getallapps", e); 
 				org.xml.sax.SAXParseException f = (org.xml.sax.SAXParseException) e
 						.getLinkedException();
 				logger.error("parse exception e=" + e.toString() + " line="
@@ -322,8 +333,6 @@ public class LgTvInteractor implements LgtvEventListener {
 		nobyebyeproblem = ((duration > (waitafterbyebye * 1000)) == true) ? 1
 				: 0;
 
-		// logger.debug("checkpairing duration="+duration+" noproblem="+nobyebyeproblem);
-
 		if (byebyeseen == -1 || nobyebyeproblem == 1) {
 			if (connectionstatus != lgtvconnectionstatus.CS_PAIRED
 					&& pairkey.length() > 0) {
@@ -384,7 +393,6 @@ public class LgTvInteractor implements LgtvEventListener {
 
 	public String appexecuteeasy(String name) {
 
-		// String chname="";
 		String cid = "";
 		String id = "";
 
@@ -399,13 +407,10 @@ public class LgTvInteractor implements LgtvEventListener {
 
 			oneapp e = appset.getenvel().find(name);
 			if (e != null) {
-				// minor=String.valueOf(e.getid());
-				// phys=e.getphysicalnum();
+				
 				cid = String.valueOf(e.getcpid());
 				id = e.getid();
-				// chtype=e.getchtype();
-				// chname=e.getchname();
-				// sourceindex=String.valueOf(e.getsourceindex());
+				
 
 				return new String(appexecute(name, id, cid));
 			} else {
@@ -414,9 +419,7 @@ public class LgTvInteractor implements LgtvEventListener {
 			}
 		}
 
-		// channelset.getchannelinfo(Integer.parseInt(major), minor, chname,
-		// chtype, sourceindex);
-
+		
 	}
 
 	public String appterminate(String appname, String id) {
@@ -436,31 +439,22 @@ public class LgTvInteractor implements LgtvEventListener {
 
 	public String appterminateeasy(String name) {
 		String id = "";
-		// String chname="";
-		// String cid="";
-
+		
 		if (name.length() == 0)
 			return new String("#appnotfound");
 
 		oneapp e = appset.getenvel().find(name);
 		if (e != null) {
-			// minor=String.valueOf(e.getid());
-			// phys=e.getphysicalnum();
-			// cid=String.valueOf(e.getcpid());
-			// name=e.getname();
+			
 			id = e.getid();
-			// chtype=e.getchtype();
-			// chname=e.getchname();
-			// sourceindex=String.valueOf(e.getsourceindex());
+			
 			return new String(appterminate(name, id));
 		} else {
 			id = name = "";
 			return new String("#appnotfound");
 		}
 
-		// channelset.getchannelinfo(Integer.parseInt(major), minor, chname,
-		// chtype, sourceindex);
-
+		
 	}
 
 	public String handlechannelchange(String major, String minor,
@@ -630,13 +624,9 @@ public class LgTvInteractor implements LgtvEventListener {
 	}
 
 	public void statusUpdateReceived(EventObject event, String ip, String data) {
-		// logger.debug("status event received in lgtvinteractor: ip="+ip);
-
-		// prevent looping in case of CONNECTION_STATUS message
+	
 		if (ip.equals(lgip)) {
-			// if
-			// (data.startsWith("CONNECTION_STATUS")==false&&data.startsWith("BYEBYE_SEEN")==false)
-			// { this.setconnectionstatus(lgtvconnectionstatus.CS_PAIRED); }
+			
 			if (data.startsWith("BYEBYE_SEEN") == true) {
 				byebyeseen = System.currentTimeMillis(); // as tv keeps alive
 															// for ~10secs we

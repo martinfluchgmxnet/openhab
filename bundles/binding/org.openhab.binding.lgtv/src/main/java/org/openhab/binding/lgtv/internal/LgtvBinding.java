@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  * when certain commands are received.
  * 
  * @author Martin Fluch
- * @since 1.4.0
+ * @since 1.5.0
  */
 public class LgtvBinding extends AbstractBinding<LgtvBindingProvider> implements
 		ManagedService, BindingChangeListener, LgtvEventListener {

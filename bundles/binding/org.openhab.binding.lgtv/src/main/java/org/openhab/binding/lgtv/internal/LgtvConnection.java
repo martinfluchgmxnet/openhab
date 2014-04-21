@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * This class open a TCP/IP connection to the LGTV device and send a command.
  * 
  * @author Martin Fluch
- * @since 1.3.0
+ * @since 1.5.0
  */
 public class LgtvConnection implements LgtvEventListener {
 
@@ -55,17 +55,6 @@ public class LgtvConnection implements LgtvEventListener {
 
 			long millis = System.currentTimeMillis();
 
-			/*
-			 * LgTvInteractor.lgtvconnectionstatus status =
-			 * connection.getconnectionstatus(); long lastsucc =
-			 * connection.getlastsuccessfulinteraction();
-			 * logger.debug("checkalive ip="
-			 * +ip+" currentconnectionstatus="+connection
-			 * .getconnectionstatus()+" millis="
-			 * +millis+" checkalive="+checkalive
-			 * +" lastsucc="+lastsucc+" lastbyebye="
-			 * +connection.getbyebyeseen());
-			 */
 
 			if (connection.getconnectionstatus() == LgTvInteractor.lgtvconnectionstatus.CS_PAIRED
 					&& connection.getlastsuccessfulinteraction() < (millis - checkalive * 1000)) {
@@ -83,26 +72,19 @@ public class LgtvConnection implements LgtvEventListener {
 				}
 
 			} else if (connection.getconnectionstatus() == LgTvInteractor.lgtvconnectionstatus.CS_NOTCONNECTED) {
-				// logger.debug("checkalive -> calling ping ");
 				InetAddress inet;
 				try {
 					inet = InetAddress.getByName(ip);
 					if (inet.isReachable(5000)) {
 						logger.debug("checkalive host reachable");
-
 						connection.checkpairing();
 					}
 				} catch (UnknownHostException e) {
-					// TODO Auto-generated catch block
 					logger.error("checkalive - host name=" + ip + " is unknown");
-					// e.printStackTrace();
 				} catch (IOException e) {
 					// Don't handle - it's normal to get an exception when tv
 					// switched off
-					// TODO Auto-generated catch block
-					// logger.error("checkalive - host name="+ip+" io Exception");
-					// e.printStackTrace();
-				}
+								}
 
 			}
 
@@ -121,8 +103,7 @@ public class LgtvConnection implements LgtvEventListener {
 			connection.setpairkey(pkey);
 
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("cannot create Interactor", e);
 		}
 
 		if (localport != 0 && reader == null) {
@@ -144,8 +125,7 @@ public class LgtvConnection implements LgtvEventListener {
 			if (reader != null)
 				reader.startserver();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error at openconnection", e);
 		}
 
 		if (connection.getpairkey().length() == 0) {
@@ -161,8 +141,7 @@ public class LgtvConnection implements LgtvEventListener {
 			if (reader != null)
 				reader.stopserver();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error at closeconnection", e);
 		}
 	}
 
@@ -314,14 +293,13 @@ public class LgtvConnection implements LgtvEventListener {
 		return new String(result);
 	}
 
-	// mfcheck @Override
-	public void statusUpdateReceived(EventObject event, String ip, String data) {
-
+	
+	public void statusUpdateReceived(EventObject event, String ip, String data) 
+	{
 		logger.debug("Mf: statusupdaterec ip=" + ip + " data=" + data);
-		if (data.startsWith("CONNECTION_STATUS=CS_PAIRED")) {
+		if (data.startsWith("CONNECTION_STATUS=CS_PAIRED")) 
+		{
 			logger.debug("paired in connection object");
 		}
-
 	}
-
 }

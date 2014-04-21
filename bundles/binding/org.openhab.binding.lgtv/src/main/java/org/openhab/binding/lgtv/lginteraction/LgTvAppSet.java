@@ -34,14 +34,23 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.openhab.binding.lgtv.internal.LgtvConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * XML Wrapper for the XML Application List of LGTV
  * 
  * @author Martin Fluch
+ * @since 1.5.0
  * 
  */
 public class LgTvAppSet {
 
+	
+	private static Logger logger = LoggerFactory
+			.getLogger(LgtvConnection.class);
+	
 	@XmlRootElement(name = "envelope")
 	@XmlAccessorType(XmlAccessType.FIELD)
 	public static class envelope {
@@ -139,7 +148,6 @@ public class LgTvAppSet {
 		int start = s.indexOf("<envelope>");
 		int stop = s.indexOf("</envelope>") + "</envelope>".length();
 		String t = s.substring(start, stop);
-		// System.out.println(t);
 		StringReader reader = new StringReader(t);
 		envel = null;
 
@@ -175,13 +183,11 @@ public class LgTvAppSet {
 			marshaller.marshal(envel, writer);
 
 		} catch (PropertyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("error in xml processing - save file",e);
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("error in xml processing - save file",e);
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			logger.error("error in xml processing - save file",ex);
 		} finally {
 			try {
 				writer.close();

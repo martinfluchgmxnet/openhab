@@ -1,6 +1,18 @@
+/**
+ * Copyright (c) 2010-2013, openHAB.org and others.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * LGInteraction / Implementation of LG API
+ * Author Martin Fluch martinfluch@gmx.net 
+ */
+
+
 package org.openhab.binding.lgtv.lginteraction;
 
-// http://stackoverflow.com/questions/8572127/tiniest-java-web-server
 
 //todo
 /*
@@ -56,6 +68,13 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+
+/**
+ * This class forks the reader task to receive tv's messages 
+ * 
+ * @author Martin Fluch
+ * @since 1.5.0
+ */
 public class LgTvMessageReader {
 
 	private static Logger logger = LoggerFactory
@@ -108,7 +127,7 @@ public class LgTvMessageReader {
 		status = 0;
 	}
 
-	// mfcheck moved out of myhandler
+
 	public void sendtohandlers(LgtvStatusUpdateEvent event, String remoteaddr,
 			String message) {
 		// send message to event listeners
@@ -182,8 +201,7 @@ public class LgTvMessageReader {
 				try {
 					result = myevent.readevent(sb.toString());
 				} catch (JAXBException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("error in httphandler",e);
 				}
 				logger.debug("eventresult=" + result);
 
@@ -207,7 +225,6 @@ public class LgTvMessageReader {
 
 					sendtohandlers(event, remoteaddr, "BYEBYE_SEEN=1");
 
-					// logger.debug("byebye fetched / to be implemented");
 				} else
 					logger.debug("warning - unhandled event");
 

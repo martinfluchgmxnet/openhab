@@ -49,8 +49,8 @@ import org.openhab.model.item.binding.BindingConfigParseException;
  * </li>
  * </ul>
  * 
- * @author Pauli Anttila
- * @since 1.3.0
+ * @author Martin Fluch
+ * @since 1.5.0
  */
 public class LgtvGenericBindingProvider extends AbstractGenericBindingProvider
 		implements LgtvBindingProvider {

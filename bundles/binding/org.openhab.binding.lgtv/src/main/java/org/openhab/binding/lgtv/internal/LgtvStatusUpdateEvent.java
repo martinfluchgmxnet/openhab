@@ -14,7 +14,7 @@ import java.util.EventObject;
  * The listener interface for receiving status updates from LGTV.
  * 
  * @author Martin Fluch
- * @since 1.4.0
+ * @since 1.5.0
  */
 public class LgtvStatusUpdateEvent extends EventObject {
 
